@@ -1,52 +1,65 @@
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Dimensions,
+} from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/config";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { registerIndieID, unregisterIndieDevice } from "native-notify";
+import axios from "axios";
 
-const backImage = require("../../assets/loginPage.png");
+const screenWidth = Math.round(Dimensions.get("window").width);
+
+const BackImage = require("../../assets/bg.jpg");
 const Login = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const HandleLogin = () => {
     if (email === "" || password === "") {
-      Alert.alert('error', 'remolissez tout les champs');
+      Alert.alert("error", "remolissez tout les champs");
     } else {
-      signInWithEmailAndPassword(auth, email, password).then(() =>
-       { console.log("succefful eingeloggt")}
-      ).catch(err => {
-        console.error('login error', err);
-        alert(' Incorrect  Email or Password ');
-      })
-  }
-
-  }
+      signInWithEmailAndPassword(auth, email, password)
+        .then(registerIndieID(`${email}`, 20570, "RNJ0Xbecd643jTVwUjXQVo"))
+        .catch((err) => {
+         
+          Alert.alert(" Incorrect  Email or Password ");
+        });
+    }
+  };
 
   return (
-    <View className="bg-black  ">
-      {/* <View>
-        <Image
-          source={backImage}
-          className="object-cover w-40"
-        />
-      </View> */}
+    <View className="flex-1 items-center justify-start ">
+      <Image
+        source={BackImage}
+        className="h-30 "
+        style={{ width: screenWidth }}
+        resizeMode="cover"
+      />
 
-      <View className="bg-white   h-3/4  justify-center items-center">
-        <Text className="text-[#FFD700] text-3xl font-semibold text-center py-3 mt-33">
+      <View className="bg-white h-full w-full rounded-t-[90px] justify-start py-6 px-6 space-y-6 -mt-44 ">
+        <Text className="text-sky-500 text-3xl font-semibold text-center py-3 mt-3">
           Welcome Back!
         </Text>
 
-        <View className="mt-10 items-center">
-          <FontAwesome
-            name="user"
+        <View className="mt-10 items-center  w-full border  rounded-2xl px-4 py-4 flex-row  justify-between space-x-4 my-2">
+          <MaterialCommunityIcons
+            name="email"
             size={24}
             color="black"
           />
+
           <TextInput
-            className="tracking-widest bg-green-100 rounded-lg w-80 text-base py-2 px-1 mx-5 mb-5"
+            className="tracking-widest rounded-lg w-80 text-base py-2 px-1 mx-5 "
             placeholder="Enter Email"
             autoCapitalize="none"
             value={email}
@@ -55,8 +68,15 @@ const Login = () => {
             autoFocus={true}
             onChangeText={setEmail}
           />
+        </View>
+        <View className="border rounded-2xl flex-row items-center px-4 py-4 space-x-4 my-2 justify-between">
+          <MaterialIcons
+            name="password"
+            size={24}
+            color="black"
+          />
           <TextInput
-            className="tracking-widest bg-green-100 rounded-lg w-80 text-base py-2 px-1 mx-5 mb-5"
+            className="tracking-widest rounded-lg w-80 text-base py-2 px-1 mx-5 "
             placeholder="Enter Password"
             autoCapitalize="none"
             autoFocus={true}
@@ -70,8 +90,8 @@ const Login = () => {
 
         <TouchableOpacity
           onPress={HandleLogin}
-          className="bg-slate-500 rounded-md mx-10 mb-2 py-2">
-          <Text className=" text-center font-semibold text-white text-lg">
+          className="  py-5 w-full rounded-xl bg-sky-500 my-3 ">
+          <Text className=" text-center font-semibold text-lg text-white">
             Login
           </Text>
         </TouchableOpacity>

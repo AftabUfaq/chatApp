@@ -1,17 +1,21 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React,{memo} from 'react'
 
-const MessageItem = ({ item, sender }) => {
+const MessageItem = memo(({ item, sender }) => {
   
-  console.log("item:", item , "sender:" ,sender);
+  
   return (
-    <View className={flex-1}>
-      <View>
-        <Text>{item.sender}</Text>
+    <View
+      className={`flex-row ${item.sender === sender ? "justify-center" : "justify-start"
+        } p-[10px]`}>
+      <View
+        className={`${item.sender === sender ? "bg-[#dcf8c6]" : "bg-white"
+          } p-[10px] rounded-xl max-w-[80%] mx-[10px]`}>
+        <Text className="text-gray-400">{item.sender}</Text>
         <Text>{item.message}</Text>
       </View>
     </View>
   );
-}
+});
 
 export default MessageItem

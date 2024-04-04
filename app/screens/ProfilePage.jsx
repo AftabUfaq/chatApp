@@ -26,7 +26,6 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { AsyncStorage } from "react-native";
 import { UserRef } from "../../firebase/config";
 
-
 const ProfilePage = () => {
   const navigation = useNavigation();
   const storage = getStorage;
@@ -34,36 +33,29 @@ const ProfilePage = () => {
   const [userEmail, setUserEmail] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const [userImageUrl, setUserImageUrl] = useState(null);
-  
-
   const { setUser, user, setUserAvatarUrl } = useContext(
     AuthenticatedUserContext
   );
- 
- const queryResult = query(UserRef, where("email", "==", user.email));
+
+  const queryResult = query(UserRef, where("email", "==", user.email));
 
   async function DocFinder(queryResult) {
     const querySnapshot = await getDocs(queryResult);
     querySnapshot.forEach((doc) => {
       if (userEmail === "") {
-          const { email, username, profilePic } = doc.data();
+        const { email, username, profilePic } = doc.data();
         setUsername(username);
-          setUserEmail(email);
-          setUserAvatarUrl(profilePic)
-          setUserImageUrl(profilePic)
-
-          
+        setUserEmail(email);
+        setUserAvatarUrl(profilePic);
+        setUserImageUrl(profilePic);
       }
     });
   }
 
   useEffect(() => {
     if (!user) return;
-      DocFinder(queryResult);
-         
+    DocFinder(queryResult);
   }, []);
-
- 
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -73,14 +65,11 @@ const ProfilePage = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    // console.log(result);
-
     if (!result.canceled) {
       uploadImage(result.assets[0].uri);
     }
-    };
-    
+  };
+
   const uploadImage = async (image) => {
     try {
       setIsLoading(true);
@@ -101,8 +90,8 @@ const ProfilePage = () => {
 
       const filename = image.substring(image.lastIndexOf("/"));
 
-        const imageRef = ref(getStorage(), `ProfilPics/${filename}`);
-        console.log(imageRef);
+      const imageRef = ref(getStorage(), `ProfilPics/${filename}`);
+      console.log(imageRef);
 
       uploadBytes(imageRef, blob)
         .then(async () => {
@@ -133,9 +122,6 @@ const ProfilePage = () => {
       setIsLoading(false);
     }
   };
-    console.log("image url a la fin =", userImageUrl);
-    
-    
 
   const deconnection = () => {
     signOut(auth)
@@ -148,12 +134,11 @@ const ProfilePage = () => {
       });
   };
 
- 
   return (
     <View>
       <View className="justify-center items-center my-10">
         <Text className="text-2xl font-medium track">
-          Bienvenue, <Text>utilisateur</Text>
+          Bienvenue, <Text> {username}</Text>
         </Text>
       </View>
       {/* Sélection d'image depuis la bibliothèque */}

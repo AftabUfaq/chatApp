@@ -4,17 +4,23 @@ import { collection, initializeFirestore } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-
+import {
+  API_KEY,
+  AUTH_DOMAIN,PRODUCT_ID,
+  STORAGE_BUCKET,
+  MESSAGE_SENDER_ID,
+  APP_ID,
+} from "@env";
 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAf6DdvoJ-CdGGQ5luOThNyeN7arUJtasE",
-  authDomain: "chatchat-e4fe2.firebaseapp.com",
-  projectId: "chatchat-e4fe2",
-  storageBucket: "chatchat-e4fe2.appspot.com",
-  messagingSenderId: "147736568994",
-  appId: "1:147736568994:web:d9ab0526c38f740777e3fb",
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PRODUCT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGE_SENDER_ID,
+  appId: APP_ID,
 };
 
 // Initialize Firebase
@@ -25,4 +31,8 @@ export const auth = initializeAuth(app, {
 });
 export const db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
-export  const UserRef = collection(db, "Users");
+//export const db = initializeFirestore(app);
+
+export const UserRef = collection(db, "Users");
+
+
