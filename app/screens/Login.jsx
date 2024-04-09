@@ -25,10 +25,10 @@ const Login = () => {
     } else {
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          console.log("succefful eingeloggt");
+         
         })
         .catch((err) => {
-          console.error("login error", err);
+        
           alert(" Incorrect  Email or Password ");
         });
     }

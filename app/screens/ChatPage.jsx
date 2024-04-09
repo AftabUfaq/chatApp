@@ -7,13 +7,15 @@ import {
   query,
 } from "firebase/firestore";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { View, Image, SafeAreaView } from "react-native";
+import { View, Image,Text, SafeAreaView, Alert } from "react-native";
 import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
 import { auth, db } from "../../firebase/config";
 
 const Chat = ({ navigation, route }) => {
   const c_uid = auth?.currentUser.uid;
   const t_uid = route.params.userId;
+  const userAvatar = route.params.userAvatar
+  const userName = route.params.userName
   const [messages, setMessages] = useState([]);
 
   const customtInputToolbar = (props) => {
@@ -36,11 +38,14 @@ const Chat = ({ navigation, route }) => {
           <Image
             style={{ width: 30, height: 30, borderRadius: 30 }}
             source={{
-              uri: route.params.avatar,
+              uri: userAvatar?userAvatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyX7Edun3qXeeJJ-6YzN6-0stWCts78KpUKg1OJuoLRA&s",
             }}
           />
         </View>
+      
       ),
+      headerTitle: (props) => <Text style={{fontSize:14, color:"#0090FF"}} >{userName}</Text>,
+     
     });
   }, [navigation]);
 
@@ -92,7 +97,7 @@ const Chat = ({ navigation, route }) => {
     const docRef = doc(collection(db, "Chats", chatid, "messages"), msgId);
     deleteDoc(docRef)
       .then(() => {
-        console.log("Document successfully deleted!");
+        Alert.alert("Message Deleted","Message successfully deleted!");
         getAllMessages()
       })
       .catch((error) => {
@@ -109,7 +114,7 @@ const Chat = ({ navigation, route }) => {
         user={{
           _id: c_uid,
           avatar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYFh3DlJzVRCMfRMDJ3xUwJgjgmkB_bOnstpAy5_FRZA&s",
+           userAvatar?userAvatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYFh3DlJzVRCMfRMDJ3xUwJgjgmkB_bOnstpAy5_FRZA&s",
         }}
         renderInputToolbar={(props) => customtInputToolbar(props)}
         renderBubble={(props) => {

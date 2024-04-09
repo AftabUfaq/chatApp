@@ -30,7 +30,7 @@ const SearchPage = () => {
     } else {
       setIsLoading(true);
       const UserRef = collection(db, "Users");
-      console.log(UserRef, "UserRef");
+
       const queryResult = query(
         UserRef,
         where("username", ">=", searchUser.trim()),

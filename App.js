@@ -20,15 +20,10 @@ function AuthStack() {
   return (
     <stack.Navigator
       initialRouteName="Login"
-      screenOptions={{ headerShown: false }}>
-      <stack.Screen
-        name="Login"
-        component={Login}
-      />
-      <stack.Screen
-        name="Register"
-        component={Register}
-      />
+      screenOptions={{ headerShown: false }}
+    >
+      <stack.Screen name="Login" component={Login} />
+      <stack.Screen name="Register" component={Register} />
     </stack.Navigator>
   );
 }
@@ -38,29 +33,25 @@ function MainStack() {
     <stack.Navigator>
       <stack.Screen
         options={{
-          headerTitle: "ChatChat",
+          headerBackTitleVisible: false,
+          headerTitle: "",
           headerTintColor: "gold",
           headerStyle: {
+            headerBackTitleVisible: false,
             backgroundColor: "black",
           },
         }}
         name="Home"
         component={HomePage}
       />
-      <stack.Screen
-        name="profil"
-        component={ProfilePage}
-      />
+      <stack.Screen name="profil" component={ProfilePage} />
 
-      <stack.Screen
-        name="search"
-        component={SearchPage}
-      />
+      <stack.Screen name="search" component={SearchPage} />
 
       <stack.Screen
         name="chat"
         component={ChatPage}
-        options={{title: ""}}
+        options={{ title: "", headerBackTitleVisible: false }}
       />
     </stack.Navigator>
   );
@@ -81,17 +72,16 @@ function RootNavigator() {
     //     setIsLoading(false);
     //   }
     // });
-    const unsubscribe = onAuthStateChanged(auth,
-      async user => {
-        user ? setUser(user) : setUser(null);
-        setIsLoading(false);
-      });
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      user ? setUser(user) : setUser(null);
+      setIsLoading(false);
+    });
 
     // Nettoyer l'effet lors du démontage du composant
     return unsubscribe;
   }, [user]);
 
-  console.log("utilisateur =", user);
+
 
   return (
     <NavigationContainer>
@@ -108,12 +98,8 @@ function RootNavigator() {
 
 export default function App() {
   return (
- 
-
     <AuthenticatedUserProvider>
-      <RootNavigator>
-      
-      </RootNavigator>
+      <RootNavigator></RootNavigator>
     </AuthenticatedUserProvider>
     // tt commence ici
   );
