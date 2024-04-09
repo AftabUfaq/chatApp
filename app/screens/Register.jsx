@@ -1,104 +1,152 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../firebase/config";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import { addDoc, collection } from "firebase/firestore";
-
+import React, { useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { auth, db } from "../../firebase/config";
+const WIDTH = Dimensions.get("screen").width - 20;
 const Register = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigation = useNavigation();
 
   const HandleRegister = () => {
     if (email === "" || password === "" || confirmPassword === "")
-      Alert.alert('error', 'complete all fields')
+      Alert.alert("error", "complete all fields");
     else if (password !== confirmPassword)
-      Alert.alert('error', ' passwords do not match');
+      Alert.alert("error", " passwords do not match");
     else {
       createUserWithEmailAndPassword(auth, email, password)
         .then(
-          async (res) => await addDoc(collection(db, "Users"), {
-            userId: res.user.uid,
-            email: res.user.email,
-            username: res.user.email.split("@")[0],
-          })
+          async (res) =>
+            await addDoc(collection(db, "Users"), {
+              userId: res.user.uid,
+              email: res.user.email,
+              username: res.user.email.split("@")[0],
+            })
         )
         .catch((error) => {
           // Une erreur s'est produite lors de l'inscription
           console.error("Erreur lors de l'inscription :", error.message);
-         
         });
     }
   };
 
   return (
-    <KeyboardAwareScrollView className="bg-slate-400 py-1 px-1">
-      {/* <View>
-        <Image
-          source={backImage}
-          className="object-cover w-40"
-        />
-      </View> */}
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontWeight: "800", color: "#009", fontSize: 40 }}>
+        Create New Account
+      </Text>
 
-      <View className="bg-white rounded-t-3xl">
-        <Text className="text-[#d60e43] text-3xl font-semibold text-center py-3 mt-3">
-         create New Account
-        </Text>
-
-        <View className="mt-10 items-center">
+      <View className="mt-10 items-center">
+        <View style={styles.textInoutOuterView}>
+          <Text style={{ fontWeight: "800", color: "#009", fontSize: 14 }}>
+            Enter Your Email
+          </Text>
           <TextInput
-            className="tracking-widest bg-green-100 rounded-lg w-80 text-base py-2 px-1 mx-5 mb-5"
-            placeholder="Email"
+            placeholder="Enter Email"
             autoCapitalize="none"
             value={email}
             keyboardType="email-address"
             textContentType="emailAddress"
+            autoFocus={true}
             onChangeText={setEmail}
+            style={styles.textInput}
           />
+        </View>
+        <View style={styles.textInoutOuterView}>
+          <Text style={{ fontWeight: "800", color: "#009", fontSize: 14 }}>
+            Enter Your password
+          </Text>
           <TextInput
-            className="tracking-widest bg-green-100 rounded-lg w-80 text-base py-2 px-1 mx-5 mb-5"
-            placeholder="Password"
+            placeholder="Enter Password"
             autoCapitalize="none"
+            autoFocus={true}
             value={password}
             secureTextEntry={true}
             autoCorrect={false}
             textContentType="password"
             onChangeText={setPassword}
+            style={styles.textInput}
           />
+        </View>
+
+        <View style={styles.textInoutOuterView}>
+          <Text style={{ fontWeight: "800", color: "#009", fontSize: 14 }}>
+            Confrim Your password
+          </Text>
           <TextInput
-            className="tracking-widest bg-green-100 rounded-lg w-80 text-base py-2 px-1 mx-5 mb-5"
-            placeholder="Confirm Password"
+            placeholder="Confrim Password"
             autoCapitalize="none"
+            autoFocus={true}
             value={confirmPassword}
             secureTextEntry={true}
             autoCorrect={false}
             textContentType="password"
             onChangeText={setConfirmPassword}
+            style={styles.textInput}
           />
         </View>
-
-        <TouchableOpacity
-          onPress={HandleRegister}
-          className="bg-slate-500 rounded-md mx-10 mb-2 py-2">
-          <Text className=" text-center font-semibold text-white text-lg">
-            Registrieren
-          </Text>
-        </TouchableOpacity>
-
-        <View className="flex-row space-x-2 justify-center">
-          <Text className="font-light tracking-wider">
-            do you have ein konto?
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text className="font-medium text-[#85b6c6]">Login</Text>
-          </TouchableOpacity>
-        </View>
       </View>
-    </KeyboardAwareScrollView>
+
+      <TouchableOpacity onPress={HandleRegister} style={styles.buttonStyle}>
+        <Text style={{ color: "#fff", fontWeight: "800", fontSize: 18 }}>
+          Register
+        </Text>
+      </TouchableOpacity>
+
+      <View
+        style={{
+          width: WIDTH,
+          marginTop: 20,
+          flexDirection: "row",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Text className="font-light tracking-wider">
+          do you have ein konto??
+        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text className="font-medium text-[#85b6c6]">Login</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
 export default Register;
+
+const styles = StyleSheet.create({
+  textInoutOuterView: {
+    width: WIDTH,
+    marginTop: 15,
+  },
+  textInput: {
+    width: WIDTH,
+    alignSelf: "center",
+    height: 55,
+    paddingHorizontal: 20,
+    backgroundColor: "#0090FF11",
+    borderRadius: 5,
+    fontWeight: "600",
+    marginTop: 5,
+  },
+  buttonStyle: {
+    width: WIDTH,
+    backgroundColor: "#0090FF",
+    height: 55,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 50,
+  },
+});

@@ -30,6 +30,7 @@ const SearchPage = () => {
     } else {
       setIsLoading(true);
       const UserRef = collection(db, "Users");
+      console.log(UserRef, "UserRef");
       const queryResult = query(
         UserRef,
         where("username", ">=", searchUser.trim()),
@@ -40,8 +41,9 @@ const SearchPage = () => {
       if (!querySnapshot.empty) {
         let friends = [];
         querySnapshot.forEach((document) => {
-          const { profilePic, username, email } = document.data();
-          friends.push({ profilePic, username, email });
+         
+          const { profilePic, username,userId, email } = document.data();
+          friends.push({ profilePic, username,userId, email });
         });
         setSearchedUsername(friends);
         setFound(true);
@@ -49,8 +51,7 @@ const SearchPage = () => {
       setIsLoading(false);
     }
   };
-  //console.log("liste d amis", setSearchedUsername);
-  console.log("liste d amis", searchedUsername);
+  
 
   return (
     <View className="flex-1 bg-orange-50">
@@ -90,7 +91,8 @@ const SearchPage = () => {
                 <TouchableOpacity onPress={() => navigation.replace('chat', { 
                     userName: item.username,
                     userAvatar: item.profilePic,
-                    userEmail: item.email
+                    userEmail: item.email,
+                    userId:item.userId,
               })}>
                 <View className="flex-row items-center space-x-4 bg-gray-200 p-2 rounded-lg mx-4 mt-5">
                   {item.profilePic !== undefined ? (
