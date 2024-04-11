@@ -44,7 +44,7 @@ function MainStack() {
         name="Home"
         component={HomePage}
       />
-      <stack.Screen name="profil" component={ProfilePage} />
+      <stack.Screen name="profile" component={ProfilePage} />
 
       <stack.Screen name="search" component={SearchPage} />
 

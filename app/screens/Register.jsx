@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, setDoc, doc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import {
   Alert,
@@ -26,14 +26,17 @@ const Register = () => {
       Alert.alert("error", " passwords do not match");
     else {
       createUserWithEmailAndPassword(auth, email, password)
-        .then(
-          async (res) =>
-            await addDoc(collection(db, "Users"), {
-              userId: res.user.uid,
-              email: res.user.email,
-              username: res.user.email.split("@")[0],
-            })
-        )
+        .then(async (res) => {
+          const usersCollectionRef = collection(db, "Users");
+          await setDoc(doc(usersCollectionRef, res.user.uid), {
+            userId: res.user.uid,
+            email: res.user.email,
+            username: res.user.email.split("@")[0],
+            req: [],
+            realFriend: [],
+            realFriend: [],
+          });
+        })
         .catch((error) => {
           // Une erreur s'est produite lors de l'inscription
           console.error("Erreur lors de l'inscription :", error.message);
