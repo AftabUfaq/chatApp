@@ -57,7 +57,9 @@ const HomePage = () => {
       const contactsObject = snapshot.data().realFriend;
 
       //  contactsObject.push(user.uid);
+      
       console.log(contactsObject, "contactsObject");
+      if(contactsObject.length != 0){
       const q1 = query(
         collection(db, "Users"),
         where("userId", "in", contactsObject)
@@ -70,6 +72,10 @@ const HomePage = () => {
       console.log(contactDetails, "contactDetails");
       setUsers(contactDetails);
       setIsLoading(false);
+      }else{
+         setUsers([]);
+      setIsLoading(false);
+      }
     });
   };
 
